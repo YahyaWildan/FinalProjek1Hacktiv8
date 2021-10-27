@@ -39,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void shotCustomDialog() {
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.custom_dialog);
+        dialog.show();
     }
 
     @Override
