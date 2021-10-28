@@ -11,7 +11,7 @@ import org.meicode.finalprojek1.Util.AppExecutor;
 import org.meicode.finalprojek1.databinding.CustomDialogBinding;
 
 
-class CustomDialogActivity extends AppCompatActivity {
+public class CustomDialog extends AppCompatActivity {
     CustomDialogBinding binding;
 
     DataBase dataBase;
@@ -23,27 +23,26 @@ class CustomDialogActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         dataBase = DataBase.getInstance(this);
 
-        binding.btnAdd.setOnClickListener(v->{
-            Data newData = new Data();
+//        binding.btnAdd.setOnClickListener(v->{
+//            Data newData = new Data();
+//
+//            newData.setKegiatan(binding.edtKegiatan.getText().toString());
+//
+//            AppExecutor.getInstance().DiskIO().execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Long result = dataBase.dataDao().insert(newData);
+//                    runOnUiThread(()->{
+//                        if (result!=0){
+//                            Toast.makeText(CustomDialogActivity.this,"Sukses menambahkan"+newData.getKegiatan(),Toast.LENGTH_LONG).show();
+//                        } else{
+//                            Toast.makeText(CustomDialogActivity.this,"Gagal menambahkan"+newData.getKegiatan(),Toast.LENGTH_LONG).show();
+//                        }
+//                    });
+//                }
+//            });
+//        });
 
-            newData.setKegiatan(binding.edtKegiatan.getText().toString());
 
-            AppExecutor.getInstance().DiskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-                    Long result = dataBase.dataDao().insert(newData);
-                    runOnUiThread(()->{
-                        if (result!=0){
-                            Toast.makeText(CustomDialogActivity.this,"Sukses menambahkan"+newData.getKegiatan(),Toast.LENGTH_LONG).show();
-                        } else{
-                            Toast.makeText(CustomDialogActivity.this,"Gagal menambahkan"+newData.getKegiatan(),Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            });
-        });
-
-        binding.btnCancel.setOnClickListener(v->{
-        });
     }
 }

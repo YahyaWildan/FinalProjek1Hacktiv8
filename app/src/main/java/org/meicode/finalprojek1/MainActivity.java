@@ -1,14 +1,17 @@
 package org.meicode.finalprojek1;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.meicode.finalprojek1.Data.Data;
 import org.meicode.finalprojek1.Data.DataBase;
@@ -22,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     CustomDialogBinding dialogBinding;
 
+
     DataBase dataBase;
     Dialog dialog;
 
@@ -32,27 +36,40 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         dataBase = DataBase.getInstance(this);
 
-        binding.addButton.setOnClickListener(v->{
-           shotCustomDialog();
+        binding.addButton.setOnClickListener(v -> {
+            shotCustomDialog();
 
         });
     }
 
     private void shotCustomDialog() {
-        dialog = new Dialog(this);
-        dialog.setContentView(R.layout.custom_dialog);
-        dialog.show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(R.layout.custom_dialog)
+                .setPositiveButton("add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getApplicationContext(), "Data Tersimpan", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.setTitle("Add a New Task \nWhat Do You To Do Next?");
+        builder.show();
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-        AppExecutor.getInstance().DiskIO().execute(()->{
+        AppExecutor.getInstance().DiskIO().execute(() -> {
             List<Data> datas = dataBase.dataDao().getAllData();
 
-            runOnUiThread(()->{
+            runOnUiThread(() -> {
                 if (datas.size() > 0) {
-                    DataAdapter dataAdapter =new DataAdapter(MainActivity.this,datas);
+                    DataAdapter dataAdapter = new DataAdapter(MainActivity.this, datas);
 
                     binding.tvToDo.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                     binding.tvToDo.setAdapter(dataAdapter);
