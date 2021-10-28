@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -23,11 +24,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
-    CustomDialogBinding dialogBinding;
-
 
     DataBase dataBase;
-    Dialog dialog;
+    String kegiatan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +43,36 @@ public class MainActivity extends AppCompatActivity {
 
     private void shotCustomDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(R.layout.custom_dialog)
-                .setPositiveButton("add", new DialogInterface.OnClickListener() {
+
+        LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
+        CustomDialogBinding customDialog = CustomDialogBinding.inflate(layoutInflater);
+        builder.setView(customDialog.getRoot());
+
+                builder.setPositiveButton("add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(getApplicationContext(), "Data Tersimpan", Toast.LENGTH_SHORT).show();
+                    Data newData = new Data();
+                    kegiatan = customDialog.edtKegiatan.getText().toString();
+                    newData.setKegiatan(kegiatan);
+
+                    AppExecutor.getInstance().DiskIO().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            Long result = DataBase.dataDao().insert(newData);
+                            runOnUiThread(()->{
+                                if (result!=0){
+                                    Toast.makeText(MainActivity.this,"Sukses menambahkan"+newData.getKegiatan(),Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(MainActivity.this,"Gagal menambahkan"+newData.getKegiatan(),Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    });
+
                     }
-                })
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                });
+                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
