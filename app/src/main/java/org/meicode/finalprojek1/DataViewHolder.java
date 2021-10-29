@@ -16,6 +16,6 @@ public class DataViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setDataToView(Data item) {
-        binding.itemData.setText(item.getKegiatan());
+        binding.viewItemData.setText(item.getKegiatan());
     }
 }

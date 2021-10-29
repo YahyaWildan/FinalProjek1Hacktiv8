@@ -15,6 +15,7 @@ import android.widget.EditText;
 
 import org.meicode.finalprojek1.data.Data;
 import org.meicode.finalprojek1.databinding.ActivityMainBinding;
+import org.meicode.finalprojek1.databinding.ItemDataBinding;
 import org.meicode.finalprojek1.viewmodel.ViewModel;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     ViewModel dataViewModel;
 
     DataAdapter dataAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,4 +81,13 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
+//    public void editData(Context context){
+//        final View viewScreen = getLayoutInflater().inflate(R.layout.item_data,null);
+//        ItemDataBinding binding = null;
+//
+//        binding.viewItemData.setOnClickListener(v->{
+//            addData(MainActivity.this);
+//        });
+//    }
 }
