@@ -1,15 +1,15 @@
-package org.meicode.finalprojek1.Data;
+package org.meicode.finalprojek1.data;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity
-public class Data{
-    @PrimaryKey
-    public int id;
+@Entity(tableName = "datas")
+public class Data {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
 
-    @ColumnInfo(name = "Kegiatan")
+    @ColumnInfo(name = "kegiatan")
     private String kegiatan;
 
     public int getId() {
@@ -28,4 +28,3 @@ public class Data{
         this.kegiatan = kegiatan;
     }
 }
-

@@ -2,100 +2,81 @@ package org.meicode.finalprojek1;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.EditText;
 
-import org.meicode.finalprojek1.Data.Data;
-import org.meicode.finalprojek1.Data.DataBase;
-import org.meicode.finalprojek1.Util.AppExecutor;
+import org.meicode.finalprojek1.data.Data;
 import org.meicode.finalprojek1.databinding.ActivityMainBinding;
-import org.meicode.finalprojek1.databinding.CustomDialogBinding;
+import org.meicode.finalprojek1.viewmodel.ViewModel;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
 
-    DataBase dataBase;
-    String kegiatan;
+    ViewModel dataViewModel;
+
+    DataAdapter dataAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        dataBase = DataBase.getInstance(this);
 
-        binding.addButton.setOnClickListener(v -> {
-            shotCustomDialog();
-
-        });
-    }
-
-    private void shotCustomDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
-        CustomDialogBinding customDialog = CustomDialogBinding.inflate(layoutInflater);
-        builder.setView(customDialog.getRoot());
-
-                builder.setPositiveButton("add", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(), "Data Tersimpan", Toast.LENGTH_SHORT).show();
-                    Data newData = new Data();
-                    kegiatan = customDialog.edtKegiatan.getText().toString();
-                    newData.setKegiatan(kegiatan);
-
-                    AppExecutor.getInstance().DiskIO().execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            Long result = DataBase.dataDao().insert(newData);
-                            runOnUiThread(()->{
-                                if (result!=0){
-                                    Toast.makeText(MainActivity.this,"Sukses menambahkan"+newData.getKegiatan(),Toast.LENGTH_LONG).show();
-                                } else {
-                                    Toast.makeText(MainActivity.this,"Gagal menambahkan"+newData.getKegiatan(),Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        }
-                    });
-
-                    }
-                });
-                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        builder.setTitle("Add a New Task \nWhat Do You To Do Next?");
-        builder.show();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        AppExecutor.getInstance().DiskIO().execute(() -> {
-            List<Data> datas = dataBase.dataDao().getAllData();
-
-            runOnUiThread(() -> {
-                if (datas.size() > 0) {
-                    DataAdapter dataAdapter = new DataAdapter(MainActivity.this, datas);
-
-                    binding.tvToDo.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-                    binding.tvToDo.setAdapter(dataAdapter);
+        dataViewModel = ViewModelProviders.of(this).get(ViewModel.class);
+        dataAdapter = new DataAdapter();
+        binding.rvData.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        binding.rvData.setLayoutManager(new LinearLayoutManager(this));
+        dataViewModel.getALlData().observe(this, new Observer<List<Data>>() {
+            @Override
+            public void onChanged(List<Data> data) {
+                if (data.size() > 0) {
+                    dataAdapter.setData(data);
+                    binding.rvData.setAdapter(dataAdapter);
                 }
-            });
+            }
         });
+
+
+        binding.fabAddData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addData(MainActivity.this);
+            }
+        });
+    }
+
+    public void addData(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final View viewDialog = getLayoutInflater().inflate(R.layout.item_add_data, null);
+
+        builder.setPositiveButton("add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                EditText edData = viewDialog.findViewById(R.id.etAddData);
+                Data data = new Data();
+                data.setKegiatan(edData.getText().toString());
+                dataViewModel.insertData(data);
+            }
+        });
+        builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setView(viewDialog);
+        builder.setTitle("Add a New Task \nWhat Do You To Do Next?");
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }
