@@ -31,4 +31,24 @@ public class DataRepository {
             }
         }.execute();
     }
+
+    public void deleteData(final Data data){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                database.dataDao().deleteData(data);
+                return null;
+            }
+        }.execute();
+    }
+
+    public void updateData(final Data data){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                database.dataDao().updateData(data);
+                return null;
+            }
+        }.execute();
+    }
 }

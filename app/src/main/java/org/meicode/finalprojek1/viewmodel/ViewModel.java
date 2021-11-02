@@ -31,4 +31,8 @@ public class ViewModel extends AndroidViewModel {
     public void insertData(Data data){
         dataRepository.insertData(data);
     }
+
+    public void deleteData(Data data){dataRepository.deleteData(data);}
+
+    public void updateData(Data data){dataRepository.updateData(data);}
 }
