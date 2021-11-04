@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
         setContentView(binding.getRoot());
 
         dataViewModel = ViewModelProviders.of(this).get(ViewModel.class);
-        dataAdapter = new DataAdapter(this);
+        dataAdapter = new DataAdapter(MainActivity.this,this);
         binding.rvData.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         binding.rvData.setLayoutManager(new LinearLayoutManager(this));
         dataViewModel.getALlData().observe(this, new Observer<List<Data>>() {

@@ -24,8 +24,9 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolder> {
     private Context context;
     private ItemClicked itemClicked;
 
-    public DataAdapter(ItemClicked itemClicked) {
+    public DataAdapter(Context context,ItemClicked itemClicked) {
         this.itemClicked = itemClicked;
+        this.context = context;
     }
 
     public void setData(List<Data> dataList) {
