@@ -66,12 +66,10 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolder> {
                 switch (id){
                     case R.id.delete:
                         itemClicked.deleteClicked(item);
-                        Toast.makeText(context, "Delete Clicked", Toast.LENGTH_LONG).show();
                         break;
 
                     case R.id.update:
                         itemClicked.updateClicked(item);
-                        Toast.makeText(context, "Update Clicked", Toast.LENGTH_LONG).show();
                         break;
                 }
                 return false;
