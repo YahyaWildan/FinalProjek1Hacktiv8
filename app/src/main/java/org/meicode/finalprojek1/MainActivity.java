@@ -89,11 +89,11 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
         EditText edData = viewDialog.findViewById(R.id.etAddData);
         edData.setText(data.getKegiatan());
 
-        builder.setPositiveButton("add", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("update", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 data.setKegiatan(edData.getText().toString());
-                dataViewModel.insertData(data);
+                dataViewModel.updateData(data);
             }
         });
         builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
             }
         });
         builder.setView(viewDialog);
-        builder.setTitle("Add a New Task \nWhat Do You To Do Next?");
+        builder.setTitle("Update Your Activity");
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
@@ -117,6 +117,5 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
     @Override
     public void deleteClicked(Data data) {
         dataViewModel.deleteData(data);
-
     }
 }
