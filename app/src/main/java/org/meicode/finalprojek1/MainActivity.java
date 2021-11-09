@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
     DataAdapter dataAdapter;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
