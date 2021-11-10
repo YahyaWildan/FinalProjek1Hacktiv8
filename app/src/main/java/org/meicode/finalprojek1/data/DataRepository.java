@@ -8,45 +8,45 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 public class DataRepository {
-    private DataDao dataDao;
+    private NoteDao noteDao;
     private Database database;
-    private LiveData<List<Data>> dataList;
+    private LiveData<List<Note>> dataList;
 
     public DataRepository(Application application) {
         database = Database.getDatabase(application);
-        dataDao = database.dataDao();
-        dataList = dataDao.getAllData();
+        noteDao = database.dataDao();
+        dataList = noteDao.getAllDataNote();
     }
 
-    public LiveData<List<Data>> getAllData() {
-        return dataDao.getAllData();
+    public LiveData<List<Note>> getAllDataNote() {
+        return noteDao.getAllDataNote();
     }
 
-    public void insertData(final Data data){
+    public void insertDataNote(final Note note){
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                database.dataDao().insertData(data);
+                database.dataDao().insertDataNotes(note);
                 return null;
             }
         }.execute();
     }
 
-    public void deleteData(final Data data){
+    public void deleteDataNote(final Note note){
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                database.dataDao().deleteData(data);
+                database.dataDao().deleteDataNotes(note);
                 return null;
             }
         }.execute();
     }
 
-    public void updateData(final Data data){
+    public void updateDataNote(final Note note){
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                database.dataDao().updateData(data);
+                database.dataDao().updateDataNotes(note);
                 return null;
             }
         }.execute();

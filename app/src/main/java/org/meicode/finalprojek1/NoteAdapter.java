@@ -5,50 +5,55 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.meicode.finalprojek1.data.Data;
+import org.meicode.finalprojek1.data.Note;
 import org.meicode.finalprojek1.databinding.ItemDataBinding;
 
 import java.util.List;
 
 
-public class DataAdapter extends RecyclerView.Adapter<DataViewHolder> {
+public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder> {
 
-    private List<Data> dataList;
+    public interface ItemClicked {
+        void updateClicked(Note note);
+
+        void deleteClicked(Note note);
+    }
+
+    private List<Note> noteList;
     private Context context;
     private ItemClicked itemClicked;
 
-    public DataAdapter(Context context,ItemClicked itemClicked) {
+
+    public NoteAdapter(Context context, ItemClicked itemClicked) {
         this.itemClicked = itemClicked;
         this.context = context;
     }
 
-    public void setData(List<Data> dataList) {
-        this.dataList = dataList;
+    public void setDataNote(List<Note> noteList) {
+        this.noteList = noteList;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public DataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemDataBinding binding = ItemDataBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new DataViewHolder(binding);
+        return new NoteViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DataViewHolder holder, int position) {
-        Data item = dataList.get(position);
-        String isiKegiatan = item.getKegiatan();
+    public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
+        Note item = noteList.get(position);
+        String isiKegiatan = item.getDataActivity();
 
         holder.setDataToView(item);
-        holder.binding.viewItemData.setText(isiKegiatan);
-        holder.binding.menuOption.setOnClickListener(new View.OnClickListener() {
+        holder.binding.tvItemData.setText(isiKegiatan);
+        holder.binding.ivMenuOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showPopup(view, item);
@@ -56,14 +61,14 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolder> {
         });
     }
 
-    public void showPopup(View view, final Data item){
+    public void showPopup(View view, final Note item) {
         PopupMenu popupMenu = new PopupMenu(context, view);
         popupMenu.inflate(R.menu.menu_options);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 int id = menuItem.getItemId();
-                switch (id){
+                switch (id) {
                     case R.id.delete:
                         itemClicked.deleteClicked(item);
                         break;
@@ -79,13 +84,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataViewHolder> {
         popupMenu.show();
     }
 
-    public interface ItemClicked{
-        void updateClicked(Data data);
-        void deleteClicked(Data data);
-    }
-
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return noteList.size();
     }
 }

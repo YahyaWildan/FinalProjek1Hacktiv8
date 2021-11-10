@@ -13,20 +13,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import org.meicode.finalprojek1.data.Data;
+import org.meicode.finalprojek1.data.Note;
 import org.meicode.finalprojek1.databinding.ActivityMainBinding;
-import org.meicode.finalprojek1.databinding.ItemDataBinding;
 import org.meicode.finalprojek1.viewmodel.ViewModel;
 
-import java.text.BreakIterator;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements DataAdapter.ItemClicked {
+public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemClicked {
     ActivityMainBinding binding;
 
     ViewModel dataViewModel;
 
-    DataAdapter dataAdapter;
+    NoteAdapter noteAdapter;
 
 
 
@@ -37,15 +35,15 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
         setContentView(binding.getRoot());
 
         dataViewModel = ViewModelProviders.of(this).get(ViewModel.class);
-        dataAdapter = new DataAdapter(MainActivity.this,this);
+        noteAdapter = new NoteAdapter(MainActivity.this,this);
         binding.rvData.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         binding.rvData.setLayoutManager(new LinearLayoutManager(this));
-        dataViewModel.getALlData().observe(this, new Observer<List<Data>>() {
+        dataViewModel.getALlDataNote().observe(this, new Observer<List<Note>>() {
             @Override
-            public void onChanged(List<Data> data) {
+            public void onChanged(List<Note> data) {
                 if (data.size() > 0) {
-                    dataAdapter.setData(data);
-                    binding.rvData.setAdapter(dataAdapter);
+                    noteAdapter.setDataNote(data);
+                    binding.rvData.setAdapter(noteAdapter);
                 }
             }
         });
@@ -67,9 +65,9 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 EditText edData = viewDialog.findViewById(R.id.etAddData);
-                Data data = new Data();
-                data.setKegiatan(edData.getText().toString());
-                dataViewModel.insertData(data);
+                Note note = new Note();
+                note.setDataActivity(edData.getText().toString());
+                dataViewModel.insertDataNote(note);
             }
         });
         builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -84,17 +82,17 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
         alertDialog.show();
     }
 
-    public void updateData(Data data) {
+    public void updateData(Note note) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final View viewDialog = getLayoutInflater().inflate(R.layout.item_add_data, null);
         EditText edData = viewDialog.findViewById(R.id.etAddData);
-        edData.setText(data.getKegiatan());
+        edData.setText(note.getDataActivity());
 
         builder.setPositiveButton("update", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                data.setKegiatan(edData.getText().toString());
-                dataViewModel.updateData(data);
+                note.setDataActivity(edData.getText().toString());
+                dataViewModel.updateDataNote(note);
             }
         });
         builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -111,12 +109,12 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
 
 
     @Override
-    public void updateClicked(Data data) {
-        updateData(data);
+    public void updateClicked(Note note) {
+        updateData(note);
     }
 
     @Override
-    public void deleteClicked(Data data) {
-        dataViewModel.deleteData(data);
+    public void deleteClicked(Note note) {
+        dataViewModel.deleteDataNote(note);
     }
 }

@@ -4,13 +4,13 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "datas")
-public class Data {
+@Entity(tableName = "notes")
+public class Note {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    @ColumnInfo(name = "kegiatan")
-    private String kegiatan;
+    @ColumnInfo(name = "data_activty")
+    private String dataActivity;
 
     public int getId() {
         return id;
@@ -20,11 +20,12 @@ public class Data {
         this.id = id;
     }
 
-    public String getKegiatan() {
-        return kegiatan;
+
+    public String getDataActivity() {
+        return dataActivity;
     }
 
-    public void setKegiatan(String kegiatan) {
-        this.kegiatan = kegiatan;
+    public void setDataActivity(String dataActivity) {
+        this.dataActivity = dataActivity;
     }
 }

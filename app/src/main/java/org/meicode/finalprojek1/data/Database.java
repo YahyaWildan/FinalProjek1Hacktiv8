@@ -5,9 +5,9 @@ import android.content.Context;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@androidx.room.Database(entities = {Data.class}, version = 1, exportSchema = false)
+@androidx.room.Database(entities = {Note.class}, version = 1, exportSchema = false)
 public abstract class Database extends RoomDatabase {
-    public abstract DataDao dataDao();
+    public abstract NoteDao dataDao();
 
     public static volatile Database INSTANCE;
 
@@ -15,7 +15,7 @@ public abstract class Database extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (Database.class) {
                 if (INSTANCE == null){
-                    INSTANCE = Room.databaseBuilder(context, Database.class, "datas.db").build();
+                    INSTANCE = Room.databaseBuilder(context, Database.class, "notes.db").build();
                 }
             }
         }
