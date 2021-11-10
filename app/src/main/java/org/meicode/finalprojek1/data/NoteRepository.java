@@ -7,12 +7,12 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-public class DataRepository {
+public class NoteRepository {
     private NoteDao noteDao;
     private Database database;
     private LiveData<List<Note>> dataList;
 
-    public DataRepository(Application application) {
+    public NoteRepository(Application application) {
         database = Database.getDatabase(application);
         noteDao = database.dataDao();
         dataList = noteDao.getAllDataNote();

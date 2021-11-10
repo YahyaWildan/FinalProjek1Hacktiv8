@@ -7,32 +7,34 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import org.meicode.finalprojek1.data.Note;
-import org.meicode.finalprojek1.data.DataRepository;
+import org.meicode.finalprojek1.data.NoteRepository;
 
 import java.util.List;
 
 
 public class ViewModel extends AndroidViewModel {
 
-    DataRepository dataRepository;
+    NoteRepository noteRepository;
     LiveData<List<Note>> dataList;
 
 
     public ViewModel(@NonNull Application application) {
         super(application);
-        dataRepository = new DataRepository(application);
-        dataList = dataRepository.getAllDataNote();
+        noteRepository = new NoteRepository(application);
+        dataList = noteRepository.getAllDataNote();
     }
 
     public LiveData<List<Note>> getALlDataNote(){
-        return dataRepository.getAllDataNote();
+        return noteRepository.getAllDataNote();
     }
 
     public void insertDataNote(Note note){
-        dataRepository.insertDataNote(note);
+        noteRepository.insertDataNote(note);
     }
 
-    public void deleteDataNote(Note note){dataRepository.deleteDataNote(note);}
+    public void deleteDataNote(Note note){
+        noteRepository.deleteDataNote(note);}
 
-    public void updateDataNote(Note note){dataRepository.updateDataNote(note);}
+    public void updateDataNote(Note note){
+        noteRepository.updateDataNote(note);}
 }
